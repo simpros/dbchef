@@ -10,7 +10,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"seed": "bun src/seed.ts"
 	},
 	"devDependencies": {
 		"@lucia-auth/adapter-drizzle": "^1.0.7",
@@ -42,8 +43,15 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"drizzle-orm": "^0.30.7",
 		"@libsql/client": "^0.6.0",
-		"oslo": "^1.2.0"
+		"bits-ui": "^0.21.2",
+		"clsx": "^2.1.0",
+		"drizzle-orm": "^0.30.7",
+		"formsnap": "^1.0.0",
+		"oslo": "^1.2.0",
+		"sveltekit-superforms": "^2.12.2",
+		"tailwind-merge": "^2.2.2",
+		"tailwind-variants": "^0.2.1",
+		"zod": "^3.22.4"
 	}
 }
