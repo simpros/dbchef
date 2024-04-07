@@ -37,7 +37,7 @@ const authCheck: Handle = async ({ event, resolve }) => {
 	if (!event.locals.user && event.url.pathname !== '/signin') {
 		redirect(307, '/signin');
 	}
-	if (event.url.pathname === '/') {
+	if (event.request.method === 'GET' && event.url.pathname === '/') {
 		redirect(307, '/dashboard');
 	}
 	return resolve(event);

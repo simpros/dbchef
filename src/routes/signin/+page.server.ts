@@ -24,8 +24,6 @@ export const actions: Actions = {
 			where: (fields, { eq }) => eq(fields.username, form.data.username)
 		});
 
-		console.log(existingUser);
-
 		if (!existingUser || !existingUser.hashed_password) {
 			return setError(form, 'password', 'Username or password is incorrect');
 		}
