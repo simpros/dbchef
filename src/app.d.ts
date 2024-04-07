@@ -4,6 +4,7 @@ declare global {
 		interface Locals {
 			user: import('lucia').User | null;
 			session: import('lucia').Session | null;
+			db: typeof import('$lib/server/db').db;
 		}
 	}
 }

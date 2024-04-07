@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Header from '$lib/components/header.svelte';
-	import type { LayoutData } from './$types';
-
-	export let data: LayoutData;
 </script>
 
-<Header />
-<slot />
+<section class="grid h-full grid-rows-[auto_1fr] gap-6">
+	<Header />
+	<main class="container mx-auto">
+		<slot />
+	</main>
+</section>

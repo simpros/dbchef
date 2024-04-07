@@ -1,4 +1,5 @@
 import { lucia } from '$lib/server/auth';
+import { db } from '$lib/server/db';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
@@ -33,14 +34,25 @@ const luciaHook: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
+const provideDb: Handle = async ({ event, resolve }) => {
+	event.locals.db = db;
+	return resolve(event);
+};
+
 const authCheck: Handle = async ({ event, resolve }) => {
 	if (!event.locals.user && event.url.pathname !== '/signin') {
 		redirect(307, '/signin');
 	}
 	if (event.request.method === 'GET' && event.url.pathname === '/') {
-		redirect(307, '/dashboard');
+		const db = event.locals.db;
+		const { length } = await db.query.resourceTable.findMany();
+		if (length === 0) {
+			redirect(307, '/add-resource');
+		} else {
+			redirect(307, '/dashboard');
+		}
 	}
 	return resolve(event);
 };
 
-export const handle = sequence(luciaHook, authCheck);
+export const handle = sequence(luciaHook, provideDb, authCheck);
