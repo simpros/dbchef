@@ -6,10 +6,11 @@ export const resourceTable = sqliteTable('resource', {
 	id: text('id')
 		.primaryKey()
 		.$default(() => randomUUID()),
+	name: text('name').notNull(),
 	host: text('host'),
 	port: integer('port'),
 	user: text('user'),
 	database: text('database'),
-	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`),
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`CURRENT_TIMESTAMP`)
+	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
 });

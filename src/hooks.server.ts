@@ -43,15 +43,6 @@ const authCheck: Handle = async ({ event, resolve }) => {
 	if (!event.locals.user && event.url.pathname !== '/signin') {
 		redirect(307, '/signin');
 	}
-	if (event.request.method === 'GET' && event.url.pathname === '/') {
-		const db = event.locals.db;
-		const { length } = await db.query.resourceTable.findMany();
-		if (length === 0) {
-			redirect(307, '/add-resource');
-		} else {
-			redirect(307, '/dashboard');
-		}
-	}
 	return resolve(event);
 };
 
