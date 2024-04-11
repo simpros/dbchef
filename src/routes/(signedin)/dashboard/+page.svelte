@@ -17,7 +17,7 @@
 	<div class="grid gap-3 grid-auto-fill-md">
 		{#each data.resources as resource}
 			<a
-				href="/resource/{resource.id}"
+				href="/resource/{resource.id}/"
 				class="flex justify-between rounded-lg border bg-card p-4 text-card-foreground shadow-sm"
 			>
 				{resource.name}

@@ -7,10 +7,12 @@ export const resourceTable = sqliteTable('resource', {
 		.primaryKey()
 		.$default(() => randomUUID()),
 	name: text('name').notNull(),
-	host: text('host'),
-	port: integer('port'),
-	user: text('user'),
-	database: text('database'),
+	host: text('host').notNull(),
+	port: integer('port').notNull(),
+	user: text('user').notNull(),
+	database: text('database').notNull(),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
 	updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
 });
+
+export type Resource = typeof resourceTable.$inferSelect;
