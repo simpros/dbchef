@@ -3,8 +3,9 @@ import type { Actions } from '@sveltejs/kit';
 import { count, eq } from 'drizzle-orm';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
+
+import { addWorkspaceSchema } from '$lib/components/workspace-interactions/add-workspace-schema';
 import type { PageServerLoad } from './$types';
-import { addWorkspaceSchema } from './add-workspace-schema';
 
 export const load = (async ({ params: { resourceid }, locals: { db }, parent }) => {
 	const [{ resource }, [{ count: numberOfViews }]] = await Promise.all([

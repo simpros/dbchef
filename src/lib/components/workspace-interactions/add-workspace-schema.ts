@@ -14,4 +14,4 @@ export const addWorkspaceSchema = z.object({
 		.default([{ type: 'select', providerQuery: '' }])
 });
 
-export type AddViewSchema = typeof addWorkspaceSchema;
+export type AddWorkspaceSchema = typeof addWorkspaceSchema;
