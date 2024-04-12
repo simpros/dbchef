@@ -22,7 +22,7 @@
 	<Separator class="my-2" />
 	<div class="flex items-center justify-between">
 		<h3 class="text-lg font-bold">Workspaces</h3>
-		<Button href="{data.resource?.id}/add">Add</Button>
+		<Button href="{data.resource?.id}/workspace/add">Add</Button>
 	</div>
 	{#each data.views as view}
 		<div>

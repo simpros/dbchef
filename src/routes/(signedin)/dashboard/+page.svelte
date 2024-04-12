@@ -12,7 +12,7 @@
 	<Separator class="my-2" />
 	<div class="flex items-center justify-between">
 		<h3 class="text-xl font-bold">Resources</h3>
-		<Button href="/add-resource">Add</Button>
+		<Button href="/resource/add">Add</Button>
 	</div>
 	<div class="grid gap-3 grid-auto-fill-md">
 		{#each data.resources as resource}
