@@ -12,14 +12,16 @@
 		type SuperValidated
 	} from 'sveltekit-superforms/client';
 	import { Separator } from '../ui/separator';
-	import { addWorkspaceSchema, type AddWorkspaceSchema } from './add-workspace-schema';
-	import WorkspaceSelect from './wordspace-select.svelte';
+	import WorkspaceInteractionBlock from './workspace-interaction-block.svelte';
+	import WorkspacePreview from './workspace-preview.svelte';
+	import { workspaceSchema, type WorkspaceSchema } from './workspace-schema';
 
-	export let data: SuperValidated<Infer<AddWorkspaceSchema>>;
+	export let resourceid: string;
+	export let data: SuperValidated<Infer<WorkspaceSchema>>;
 
 	const form = superForm(data, {
 		dataType: 'json',
-		validators: zodClient(addWorkspaceSchema),
+		validators: zodClient(workspaceSchema),
 		async onUpdated(event) {
 			if (event.form.valid) {
 				toast.success('Workspace created');
@@ -47,7 +49,10 @@
 		<Button
 			on:click={(e) => {
 				e.preventDefault();
-				$formData.elements = [...$formData.elements, { type: 'select', providerQuery: '' }];
+				$formData.elements = [
+					...$formData.elements,
+					{ name: '', type: 'select', providerQuery: '' }
+				];
 			}}
 		>
 			Add Element
@@ -56,16 +61,16 @@
 	<div class="grid h-full grid-cols-[1fr_auto_1fr]">
 		<div>
 			<h4 class="mb-3 text-lg font-bold">Interactions</h4>
-			<div>
+			<div class="space-y-2">
 				{#each $viewElements as _, i}
-					<WorkspaceSelect {form} {i} />
+					<WorkspaceInteractionBlock {form} {i} />
 				{/each}
 			</div>
 		</div>
 		<Separator orientation="vertical" class="mx-3" />
 		<div>
 			<h4 class="mb-3 text-lg font-bold">Preview</h4>
-			TODO
+			<WorkspacePreview {form} {resourceid} />
 		</div>
 	</div>
 	<Form.Button class="w-fit">Create Workspace</Form.Button>

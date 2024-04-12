@@ -1,8 +1,8 @@
-import type { PoolClient } from 'pg';
+import type { Pool } from 'pg';
 
-const connections = new Map<string, PoolClient>();
+const connections = new Map<string, Pool>();
 
-export function addConnection(id: string, pool: PoolClient) {
+export function addConnection(id: string, pool: Pool) {
 	const existing = connections.get(id);
 	if (existing) {
 		return;
@@ -16,7 +16,7 @@ export function addConnection(id: string, pool: PoolClient) {
 export function removeConnection(id: string) {
 	const pool = connections.get(id);
 	if (pool) {
-		pool.release();
+		pool.end();
 		connections.delete(id);
 	}
 }

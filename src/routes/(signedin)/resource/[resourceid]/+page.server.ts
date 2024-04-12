@@ -31,7 +31,7 @@ export const actions: Actions = {
 			error(404, `Resource "${resourceid}" not found`);
 		}
 
-		const connection = new Pool({
+		const pool = new Pool({
 			host: resource.host,
 			port: resource.port,
 			user: resource.user,
@@ -40,8 +40,10 @@ export const actions: Actions = {
 		});
 
 		try {
-			const client = await connection.connect();
-			addConnection(resourceid, client);
+			const result = await pool.connect();
+			result.release();
+
+			addConnection(resourceid, pool);
 		} catch (e) {
 			return setError(form, 'password', 'Invalid password');
 		}

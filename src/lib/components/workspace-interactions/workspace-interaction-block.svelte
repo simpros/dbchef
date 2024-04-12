@@ -3,9 +3,9 @@
 	import * as Select from '$lib/components/ui/select';
 	import type { Infer, SuperForm } from 'sveltekit-superforms/client';
 	import { Input } from '../ui/input';
-	import { availableElementTypes, type AddWorkspaceSchema } from './add-workspace-schema';
+	import { availableElementTypes, type WorkspaceSchema } from './workspace-schema';
 
-	export let form: SuperForm<Infer<AddWorkspaceSchema>>;
+	export let form: SuperForm<Infer<WorkspaceSchema>>;
 	export let i: number;
 	const { form: formData } = form;
 
@@ -14,7 +14,13 @@
 		: undefined;
 </script>
 
-<div class="grid gap-3 grid-auto-fit-md">
+<div class="grid gap-3 rounded-md border p-2 grid-auto-fit-md">
+	<Form.Field {form} name="elements[{i}].name">
+		<Form.Control let:attrs>
+			<Form.Label>Name</Form.Label>
+			<Input {...attrs} bind:value={$formData.elements[i].name} />
+		</Form.Control>
+	</Form.Field>
 	<Form.Field {form} name="elements[{i}].type">
 		<Form.Control let:attrs>
 			<Form.Label>Type</Form.Label>
@@ -35,7 +41,7 @@
 			</Select.Root>
 		</Form.Control>
 	</Form.Field>
-	<Form.Field {form} name="elements[{i}].providerQuery">
+	<Form.Field class="col-span-full" {form} name="elements[{i}].providerQuery">
 		<Form.Control let:attrs>
 			<Form.Label>Provider Query</Form.Label>
 			<Input class="font-mono" {...attrs} bind:value={$formData.elements[i].providerQuery} />
