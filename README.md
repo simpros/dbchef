@@ -1,38 +1,12 @@
-# create-svelte
+# DBChef
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## The Database UI that finally fits your usecase.
 
-## Creating a project
+Are you tired of searching for the correct data within database with dozens of tables? So was I. Thats why I build DBChef - a reuseable and unopinionated Admin-UI. Connect your resource and build views that fit your usecase.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Development
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+This application is build with bun and sveltekit.
+Before you can start you have to setup the sqlite db file with `bunx drizzle-kit push:sqlite`. This will create a dbchef.sqlite file - thats all you need for DBChef!
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+To start the devserver run `bun --bun run dev`.

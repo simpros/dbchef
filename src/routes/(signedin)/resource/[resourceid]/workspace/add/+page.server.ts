@@ -1,11 +1,10 @@
-import { resourceViewTable } from '$db/schema';
-import type { Actions } from '@sveltejs/kit';
+import { workspaceTable } from '$db/schema';
 import { count, eq } from 'drizzle-orm';
 import { zod } from 'sveltekit-superforms/adapters';
-import { superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms/server';
 
 import { workspaceSchema } from '$lib/components/workspace-interactions/workspace-schema';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ params: { resourceid }, locals: { db }, parent }) => {
 	const [{ resource }, [{ count: numberOfViews }]] = await Promise.all([
@@ -14,15 +13,14 @@ export const load = (async ({ params: { resourceid }, locals: { db }, parent }) 
 			.select({
 				count: count()
 			})
-			.from(resourceViewTable)
-			.where(eq(resourceViewTable.resourceId, resourceid))
+			.from(workspaceTable)
+			.where(eq(workspaceTable.resourceId, resourceid))
 			.limit(1)
 	]);
 	return {
 		form: await superValidate(
 			{
-				name: `${resource.name} Workspace #${numberOfViews + 1}`,
-				elements: [{ name: '', type: 'select', providerQuery: '' }]
+				name: `${resource.name} Workspace #${numberOfViews + 1}`
 			},
 			zod(workspaceSchema),
 			{
@@ -33,8 +31,27 @@ export const load = (async ({ params: { resourceid }, locals: { db }, parent }) 
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	default: async ({ request, locals: { db } }) => {
+	default: async ({ request, params: { resourceid }, locals: { db } }) => {
 		const form = await superValidate(request, zod(workspaceSchema));
-		return { form };
+
+		if (!form.valid) return { form };
+
+		const newWorkspace = await db.transaction(async (tx) => {
+			const [{ id }] = await tx
+				.insert(workspaceTable)
+				.values({
+					name: form.data.name,
+					resourceId: resourceid
+				})
+				.returning({ id: workspaceTable.id });
+
+			return id;
+		});
+
+		return message(form, {
+			success: true,
+			message: 'Workspace updated',
+			redirect: `${newWorkspace}/edit`
+		});
 	}
 };

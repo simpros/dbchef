@@ -4,3 +4,4 @@ import { drizzle } from 'drizzle-orm/bun-sqlite';
 
 const sqliteDb = new Database('dbchef.sqlite');
 export const db = drizzle(sqliteDb, { schema });
+export type DBChefDb = typeof db;

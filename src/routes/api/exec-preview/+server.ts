@@ -1,7 +1,8 @@
+import { callPreviewToDb } from '$lib/components/workspace-preview/call-preview';
+import { workspacePreviewSchema } from '$lib/components/workspace-preview/preview-schema';
 import { error, json } from '@sveltejs/kit';
 import { getConnection } from '../../(signedin)/resource/[resourceid]/connections';
 import type { RequestHandler } from './$types';
-import { workspacePreviewSchema } from './workspace-preview-schema';
 
 export const POST: RequestHandler = async ({ request, locals: { user } }) => {
 	if (!user) return error(401, 'Unauthorized');
@@ -18,16 +19,7 @@ export const POST: RequestHandler = async ({ request, locals: { user } }) => {
 	}
 
 	try {
-		const results = await Promise.all(
-			form.data.elements.map(async (element) => {
-				try {
-					const result = await connection.query(element.providerQuery);
-					return { name: element.name, result: result.rows };
-				} catch (e) {
-					return { name: element.name, error: 'Invalid Query' };
-				}
-			})
-		);
+		const results = await callPreviewToDb(form.data, connection);
 		return json(results);
 	} catch (e) {
 		return error(500, 'Invalid Query');

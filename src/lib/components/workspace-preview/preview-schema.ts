@@ -11,5 +11,9 @@ export const workspacePreviewSchema = z.object({
 			type: z.enum(availableElementTypes),
 			providerQuery: z.string()
 		})
-	)
+	),
+	parameters: z.record(z.string())
 });
+
+export type PreviewSchema = typeof workspacePreviewSchema;
+export type Preview = z.infer<PreviewSchema>;

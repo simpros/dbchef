@@ -1,17 +1,24 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { derived, writable } from 'svelte/store';
 	import type { Infer, SuperForm } from 'sveltekit-superforms';
-	import type { WorkspaceSchema } from './workspace-schema';
+	import type { WorkspaceElementsSchema } from '../workspace-interactions/workspace-schema';
+	import PreviewElements from './preview-elements.svelte';
 
 	export let resourceid: string;
-	export let form: SuperForm<Infer<WorkspaceSchema>>;
+	export let form: SuperForm<Infer<WorkspaceElementsSchema>>;
 
 	const { form: formData } = form;
 	let debounce: Timer;
 	let previewResult: Promise<Response> | undefined;
+	let parameters = writable({} as Record<string, unknown>);
+
+	const idk = derived([formData, parameters], ([$formData, $parameters]) => {
+		return { ...$formData, parameters: $parameters };
+	});
 
 	onMount(() => {
-		const unsub = formData.subscribe((v) => {
+		const unsub = idk.subscribe((v) => {
 			clearTimeout(debounce);
 			debounce = setTimeout(() => {
 				previewResult = fetch('/api/exec-preview', {
@@ -21,7 +28,7 @@
 					},
 					body: JSON.stringify({ ...v, resource_id: resourceid })
 				});
-			}, 500);
+			}, 250);
 		});
 
 		return unsub;
@@ -33,9 +40,15 @@
 {:then response}
 	{#if response?.ok}
 		{#await response.json()}
-			Loading
+			<p>Loading...</p>
 		{:then data}
-			<pre>{JSON.stringify(data, null, 2)}</pre>
+			<PreviewElements
+				{data}
+				parameters={$parameters}
+				onSelectChange={(k, v) => {
+					parameters.update((p) => ({ ...p, [k]: v }));
+				}}
+			/>
 		{/await}
 	{:else if response?.status === 400}
 		<p>Invalid query</p>

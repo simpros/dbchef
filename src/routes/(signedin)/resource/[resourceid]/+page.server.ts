@@ -7,11 +7,15 @@ import { addConnection, removeConnection } from './connections';
 import { establishConnectionSchema } from './establish-connection-schema';
 
 export const load = (async ({ params: { resourceid }, locals: { db } }) => {
+	const resource = await db.query.resourceTable.findFirst({
+		where: ({ id }, { eq }) => eq(id, resourceid)
+	});
+
+	if (!resource) error(404, 'Resource not found');
+
 	return {
-		resource: await db.query.resourceTable.findFirst({
-			where: ({ id }, { eq }) => eq(id, resourceid)
-		}),
-		views: await db.query.resourceViewTable.findMany({
+		resource,
+		workspaces: await db.query.workspaceTable.findMany({
 			where: ({ resourceId }, { eq }) => eq(resourceId, resourceid)
 		})
 	};
