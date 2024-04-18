@@ -1,7 +1,7 @@
 import {
 	callElement,
 	type ElementData
-} from '$lib/components/workspace-view/get-workspace-element';
+} from '$lib/components/workspace-element/get-workspace-element';
 import { error } from '@sveltejs/kit';
 import { getConnection } from '../../connections';
 import type { PageServerLoad } from './$types';

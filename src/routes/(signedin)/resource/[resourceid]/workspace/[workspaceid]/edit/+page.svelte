@@ -58,7 +58,7 @@
 						{/each}
 					</div>
 				{:else}
-					<Button>Add your first View</Button>
+					<Button href="./views/add">Add your first View</Button>
 				{/if}
 			</Accordion.Content>
 		</Accordion.Item>

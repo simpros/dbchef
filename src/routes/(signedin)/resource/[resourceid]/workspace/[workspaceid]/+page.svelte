@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
-	import WorkspaceElements from '$lib/components/workspace-view/workspace-element.svelte';
+	import WorkspaceElements from '$lib/components/workspace-element/workspace-element.svelte';
 	import { Edit } from 'lucide-svelte';
 	import type { PageData } from './$types';
 
