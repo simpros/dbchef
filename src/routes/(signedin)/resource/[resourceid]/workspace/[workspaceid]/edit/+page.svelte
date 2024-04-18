@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import BackAnchor from '$lib/components/ui/anchor/back-anchor.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import WorkspaceForm from '$lib/components/workspace-interactions/workspace-elements-form.svelte';
@@ -42,6 +44,22 @@
 			<Accordion.Trigger>Items</Accordion.Trigger>
 			<Accordion.Content>
 				<WorkspaceForm data={data.elementsform} resourceid={$page.params.resourceid} />
+			</Accordion.Content>
+		</Accordion.Item>
+		<Accordion.Item value="workspace-views">
+			<Accordion.Trigger>Views</Accordion.Trigger>
+			<Accordion.Content>
+				{#if data.views.length}
+					<div class="grid gap-3 grid-auto-fill-lg">
+						{#each data.views as view}
+							<Card.Root>
+								<Card.Header>{view.name}</Card.Header>
+							</Card.Root>
+						{/each}
+					</div>
+				{:else}
+					<Button>Add your first View</Button>
+				{/if}
 			</Accordion.Content>
 		</Accordion.Item>
 	</Accordion.Root>

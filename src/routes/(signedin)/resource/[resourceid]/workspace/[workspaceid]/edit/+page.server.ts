@@ -9,11 +9,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ params: { workspaceid }, locals: { db }, parent }) => {
+export const load = (async ({ params: { workspaceid }, locals: { db } }) => {
 	const currentVal = await db.query.workspaceTable.findFirst({
 		where: ({ id }, { eq }) => eq(id, workspaceid),
 		with: {
-			elements: true
+			elements: true,
+			views: true
 		}
 	});
 
@@ -23,7 +24,8 @@ export const load = (async ({ params: { workspaceid }, locals: { db }, parent })
 		workspaceform: await superValidate(currentVal, zod(workspaceSchema)),
 		elementsform: await superValidate(currentVal, zod(workspaceElementsSchema), {
 			errors: false
-		})
+		}),
+		views: currentVal.views
 	};
 }) satisfies PageServerLoad;
 
