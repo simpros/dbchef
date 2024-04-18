@@ -60,5 +60,9 @@
     "@libsql/client": "^0.6.0",
     "drizzle-orm": "^0.30.7",
     "oslo": "^1.2.0"
-  }
+  },
+  "trustedDependencies": [
+    "es5-ext",
+    "svelte-preprocess"
+  ]
 }
