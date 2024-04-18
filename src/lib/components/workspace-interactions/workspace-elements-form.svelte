@@ -38,7 +38,7 @@
 </script>
 
 <div class="grid h-full grid-cols-[1fr_auto_1fr]">
-	<div>
+	<div class="space-y-3">
 		<div class="grid grid-cols-[1fr_auto] items-center">
 			<h4 class="text-lg font-bold">Interactions</h4>
 			<Button
@@ -56,7 +56,12 @@
 			</Button>
 		</div>
 		<div class="space-y-2">
-			<form method="post" use:enhance class="grid grid-cols-1 content-center space-y-5">
+			<form
+				method="post"
+				action="?/update-elements"
+				use:enhance
+				class="grid grid-cols-1 content-center space-y-5"
+			>
 				{#each $viewElements as _, i}
 					<WorkspaceInteractionBlock {form} {i} />
 				{/each}

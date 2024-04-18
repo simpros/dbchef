@@ -36,7 +36,7 @@
 				<Form.FormField {form} name="password">
 					<Form.FormControl let:attrs>
 						<Label>Password</Label>
-						<Input {...attrs} bind:value={$formData.password} />
+						<Input type="password" {...attrs} bind:value={$formData.password} />
 					</Form.FormControl>
 					<Form.FieldErrors />
 				</Form.FormField>

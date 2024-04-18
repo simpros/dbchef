@@ -9,7 +9,9 @@ export const POST: RequestHandler = async ({ request, locals: { user } }) => {
 	const rawRequestData = await request.json();
 	const form = workspacePreviewSchema.safeParse(rawRequestData);
 
-	if (!form.success) return json(form.error, { status: 400 });
+	if (!form.success) {
+		return json(form.error, { status: 400 });
+	}
 
 	// Execute the statements and return the result
 	const connection = getConnection(form.data.resource_id);

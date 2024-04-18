@@ -3,6 +3,7 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { genId } from '../../lib/generate-id';
 import { resourceTable } from './resource';
 import { workspaceElementTable } from './workspace-element';
+import { workspaceViewTable } from './workspace-view';
 
 export const workspaceTable = sqliteTable('workspace', {
 	id: text('id')
@@ -15,5 +16,6 @@ export const workspaceTable = sqliteTable('workspace', {
 });
 
 export const workspaceRelations = relations(workspaceTable, ({ many }) => ({
-	elements: many(workspaceElementTable)
+	elements: many(workspaceElementTable),
+	views: many(workspaceViewTable)
 }));
