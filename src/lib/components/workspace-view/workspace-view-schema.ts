@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const workspaceViewSchema = z.object({
 	name: z.string().min(1),
-	description: z.string().optional(),
+	description: z.string().nullable(),
 	type: z.enum(availableWorkspaceViewTypes).default('card-grid'),
 	providerQuery: z.string().min(1)
 });

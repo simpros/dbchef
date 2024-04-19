@@ -5,6 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { toast } from 'svelte-sonner';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import WorkspaceViewPreview from './workspace-view-preview.svelte';
 	import type { WorkspaceViewSchema } from './workspace-view-schema';
 
 	export let data: SuperValidated<Infer<WorkspaceViewSchema>>;
@@ -50,3 +51,4 @@
 	</Form.Field>
 	<Form.Button class="w-fit">Save View</Form.Button>
 </form>
+<WorkspaceViewPreview {form} />

@@ -11,7 +11,8 @@ export const workspaceViewTable = sqliteTable('workspace_view', {
 		.$defaultFn(() => genId('wsv')),
 	name: text('name').notNull(),
 	description: text('description'),
-	type: text('type', { enum: availableWorkspaceViewTypes }),
+	type: text('type', { enum: availableWorkspaceViewTypes }).notNull(),
+	providerQuery: text('provider_query').notNull(),
 	workspaceId: text('workspace_id')
 		.notNull()
 		.references(() => workspaceTable.id)

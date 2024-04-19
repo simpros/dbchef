@@ -53,7 +53,13 @@
 					<div class="grid gap-3 grid-auto-fill-lg">
 						{#each data.views as view}
 							<Card.Root>
-								<Card.Header>{view.name}</Card.Header>
+								<Card.Header>
+									<Card.Title>{view.name}</Card.Title>
+									<Card.Description>{view.description}</Card.Description>
+								</Card.Header>
+								<Card.Footer class="justify-end">
+									<Button href={`./views/${view.id}`}>Edit</Button>
+								</Card.Footer>
 							</Card.Root>
 						{/each}
 					</div>
