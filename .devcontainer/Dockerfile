@@ -10,3 +10,4 @@ RUN curl -fsSL https://bun.sh/install | bash
 RUN mv /root/.bun/bin/bun /usr/local/bin/
 # Allow non-root users to run bun
 RUN chmod a+x /usr/local/bin/bun
+RUN ln -s /usr/local/bin/bun /usr/local/bin/bunx
