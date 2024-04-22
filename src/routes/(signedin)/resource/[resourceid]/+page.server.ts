@@ -2,8 +2,8 @@ import { error, redirect } from '@sveltejs/kit';
 import { Pool } from 'pg';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { addConnection, removeConnection } from '../../../../lib/connections';
 import type { Actions, PageServerLoad } from './$types';
-import { addConnection, removeConnection } from './connections';
 import { establishConnectionSchema } from './establish-connection-schema';
 
 export const load = (async ({ params: { resourceid }, locals: { db } }) => {

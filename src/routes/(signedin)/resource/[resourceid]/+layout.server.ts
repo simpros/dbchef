@@ -1,8 +1,8 @@
+import { getConnection } from '$lib/connections';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { LayoutServerLoad } from './$types';
-import { getConnection } from './connections';
 import { establishConnectionSchema } from './establish-connection-schema';
 
 export const load = (async ({ params: { resourceid }, locals: { db }, depends }) => {

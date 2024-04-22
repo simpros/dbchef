@@ -1,7 +1,7 @@
 import { callPreviewToDb } from '$lib/components/workspace-preview/call-preview';
 import { workspacePreviewSchema } from '$lib/components/workspace-preview/preview-schema';
+import { getConnection } from '$lib/connections';
 import { error, json } from '@sveltejs/kit';
-import { getConnection } from '../../(signedin)/resource/[resourceid]/connections';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, locals: { user } }) => {

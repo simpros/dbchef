@@ -1,26 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { toast } from 'svelte-sonner';
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import WorkspaceViewPreview from './workspace-view-preview.svelte';
+	import { type Infer, type SuperForm } from 'sveltekit-superforms/client';
 	import type { WorkspaceViewSchema } from './workspace-view-schema';
 
-	export let data: SuperValidated<Infer<WorkspaceViewSchema>>;
-	const form = superForm(data, {
-		async onUpdated({ form }) {
-			if (form.message?.success) {
-				toast.success('View saved');
-				await goto('..');
-			}
-		}
-	});
+	export let form: SuperForm<Infer<WorkspaceViewSchema>>;
+
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="post" use:enhance class="grid grid-cols-1 gap-3">
+<form method="post" use:enhance class="grid grid-cols-2 gap-3">
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
 			<Form.Label>Name</Form.Label>
@@ -38,7 +28,7 @@
 			/>
 		</Form.Control>
 	</Form.Field>
-	<Form.Field {form} name="providerQuery">
+	<Form.Field class="col-span-full" {form} name="providerQuery">
 		<Form.Control let:attrs>
 			<Form.Label>Query</Form.Label>
 			<Textarea
@@ -51,4 +41,3 @@
 	</Form.Field>
 	<Form.Button class="w-fit">Save View</Form.Button>
 </form>
-<WorkspaceViewPreview {form} />

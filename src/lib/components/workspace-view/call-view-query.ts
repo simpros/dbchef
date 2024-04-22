@@ -1,5 +1,4 @@
-import type { WorkspaceElement } from '$db/schema';
-import type { DBChefDb } from '$lib/server/db';
+import type { WorkspaceView, availableViewTypes } from '$db/schema';
 import type { Pool } from 'pg';
 
 function queryParser(rawQuery: string, parameter: Record<string, unknown>) {
@@ -17,12 +16,11 @@ function queryParser(rawQuery: string, parameter: Record<string, unknown>) {
 	return newQuery;
 }
 
-export async function callElement(
-	element: WorkspaceElement,
+export async function callViewQuery(
+	element: WorkspaceView,
 	parameter: Record<string, unknown>,
-	db: DBChefDb,
 	dbConnection: Pool
-): Promise<ElementData> {
+): Promise<ViewData> {
 	try {
 		const query = queryParser(element.providerQuery, parameter);
 		const result = await dbConnection.query(query);
@@ -30,7 +28,7 @@ export async function callElement(
 			success: true,
 			name: element.name,
 			type: element.type,
-			options: result.rows
+			rows: result.rows
 		};
 	} catch (e) {
 		if (e instanceof Error) {
@@ -40,17 +38,17 @@ export async function callElement(
 	}
 }
 
-export type SuccessElementData = {
+export type SuccessViewData = {
 	success: true;
 	name: string;
-	type: 'select';
-	options: Record<string, string>[];
+	type: (typeof availableViewTypes)[number];
+	rows: unknown[];
 };
 
-export type ErrorElementData = {
+export type ErrorViewData = {
 	success: false;
 	name: string;
 	error: string;
 };
 
-export type ElementData = SuccessElementData | ErrorElementData;
+export type ViewData = SuccessViewData | ErrorViewData;

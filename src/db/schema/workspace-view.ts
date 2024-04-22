@@ -3,7 +3,7 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { genId } from '../../lib/generate-id';
 import { workspaceTable } from './workspace';
 
-export const availableWorkspaceViewTypes = ['card-grid'] as const;
+export const availableViewTypes = ['card-grid'] as const;
 
 export const workspaceViewTable = sqliteTable('workspace_view', {
 	id: text('id')
@@ -11,7 +11,7 @@ export const workspaceViewTable = sqliteTable('workspace_view', {
 		.$defaultFn(() => genId('wsv')),
 	name: text('name').notNull(),
 	description: text('description'),
-	type: text('type', { enum: availableWorkspaceViewTypes }).notNull(),
+	type: text('type', { enum: availableViewTypes }).notNull(),
 	providerQuery: text('provider_query').notNull(),
 	workspaceId: text('workspace_id')
 		.notNull()

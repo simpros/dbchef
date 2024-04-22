@@ -3,12 +3,14 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { genId } from '../../lib/generate-id';
 import { workspaceTable } from './workspace';
 
+export const availableElementTypes = ['select'] as const;
+
 export const workspaceElementTable = sqliteTable('workspace_element', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => genId('wse')),
 	name: text('name').notNull(),
-	type: text('type', { enum: ['select'] }).notNull(),
+	type: text('type', { enum: availableElementTypes }).notNull(),
 	providerQuery: text('provider_query').notNull(),
 	workspaceId: text('workspace_id')
 		.notNull()
