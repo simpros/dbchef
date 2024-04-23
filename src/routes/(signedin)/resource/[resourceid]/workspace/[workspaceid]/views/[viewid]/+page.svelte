@@ -12,7 +12,7 @@
 		async onUpdated({ form }) {
 			if (form.message?.success) {
 				toast.success('View saved');
-				await goto('..');
+				await goto('../edit');
 			}
 		}
 	});

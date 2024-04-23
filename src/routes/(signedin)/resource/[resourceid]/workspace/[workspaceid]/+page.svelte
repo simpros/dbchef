@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+	import { Separator } from '$lib/components/ui/separator';
 	import WorkspaceElements from '$lib/components/workspace-element/workspace-elements.svelte';
 	import WorkspaceView from '$lib/components/workspace-view/workspace-view.svelte';
 	import { Edit } from 'lucide-svelte';
@@ -18,6 +19,7 @@
 	{:else}
 		<WorkspaceElements elements={data.elements} />
 		{#if data.view}
+			<Separator class="my-3" />
 			<WorkspaceView viewData={data.view} />
 		{:else}
 			<div>

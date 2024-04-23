@@ -43,7 +43,7 @@
 			</form>
 		</Card.Content>
 		<Card.Footer class="flex justify-between">
-			<Button variant="outline">Cancel</Button>
+			<Button href="/" variant="outline">Cancel</Button>
 			<Button>Connect</Button>
 		</Card.Footer>
 	</Card.Root>

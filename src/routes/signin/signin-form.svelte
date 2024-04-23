@@ -1,8 +1,8 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms/client';
 	import { signinSchema, type SigninSchema } from './schema';
 
 	export let data: SuperValidated<Infer<SigninSchema>>;
