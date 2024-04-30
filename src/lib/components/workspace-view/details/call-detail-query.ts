@@ -16,19 +16,24 @@ function queryParser(rawQuery: string, parameter: Record<string, unknown>) {
 	return newQuery;
 }
 
-export async function callViewQuery(
+export async function callDetailQuery(
 	element: WorkspaceView,
 	parameter: Record<string, unknown>,
 	dbConnection: Pool
-): Promise<ViewData> {
+): Promise<DetailData> {
 	try {
-		const query = queryParser(element.providerQuery, parameter);
+		if (!element.detailQuery) throw new Error('No detail query');
+		const query = queryParser(element.detailQuery, parameter);
 		const result = await dbConnection.query(query);
+
+		if (result.rows.length === 0) throw new Error('No data found');
+		if (result.rows.length > 1) throw new Error('Multiple rows found');
+
 		return {
 			success: true,
 			name: element.name,
 			type: element.type,
-			rows: result.rows
+			rows: result
 		};
 	} catch (e) {
 		if (e instanceof Error) {
@@ -42,7 +47,7 @@ export type SuccessViewData = {
 	success: true;
 	name: string;
 	type: (typeof availableViewTypes)[number];
-	rows: QueryResult['rows'];
+	rows: QueryResult;
 };
 
 export type ErrorViewData = {
@@ -51,4 +56,4 @@ export type ErrorViewData = {
 	error: string;
 };
 
-export type ViewData = SuccessViewData | ErrorViewData;
+export type DetailData = SuccessViewData | ErrorViewData;

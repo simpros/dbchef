@@ -58,13 +58,16 @@
 									<Card.Description>{view.description}</Card.Description>
 								</Card.Header>
 								<Card.Footer class="justify-end">
-									<Button href={`./views/${view.id}`}>Edit</Button>
+									<Button href="edit/{view.id}">Edit</Button>
 								</Card.Footer>
 							</Card.Root>
 						{/each}
+						<Card.Root class="grid place-items-center">
+							<Button href="edit/add-view">Add View</Button>
+						</Card.Root>
 					</div>
 				{:else}
-					<Button href="./views/add">Add your first View</Button>
+					<Button href="edit/add-view">Add your first View</Button>
 				{/if}
 			</Accordion.Content>
 		</Accordion.Item>

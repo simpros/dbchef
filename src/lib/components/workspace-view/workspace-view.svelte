@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { WorkspaceViewData } from './get-view-data';
-	import CardGridView from './view-types/card-grid-view.svelte';
+	import CardGridView from './view-types/card-grid/card-grid-view.svelte';
 
 	export let viewData: WorkspaceViewData;
 </script>

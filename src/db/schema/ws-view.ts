@@ -13,6 +13,7 @@ export const workspaceViewTable = sqliteTable('workspace_view', {
 	description: text('description'),
 	type: text('type', { enum: availableViewTypes }).notNull(),
 	providerQuery: text('provider_query').notNull(),
+	detailQuery: text('detail_query'),
 	workspaceId: text('workspace_id')
 		.notNull()
 		.references(() => workspaceTable.id)

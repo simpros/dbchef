@@ -1,12 +1,13 @@
-import { workspaceViewTable } from '$db/schema';
-import { workspaceViewSchema } from '$lib/components/workspace-view/workspace-view-schema';
+import { getViewData } from '$lib/components/workspace-view/get-view-data';
+import { getConnection } from '$lib/connections';
 import { error } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { message, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params: { viewid }, locals: { db } }) => {
+export const load = (async ({
+	params: { resourceid, viewid },
+	url: { searchParams },
+	locals: { db }
+}) => {
 	const workspaceView = await db.query.workspaceViewTable.findFirst({
 		where: ({ id }, { eq }) => eq(id, viewid)
 	});
@@ -15,27 +16,12 @@ export const load = (async ({ params: { viewid }, locals: { db } }) => {
 		return error(404, 'View not found.');
 	}
 
-	return { form: await superValidate(workspaceView, zod(workspaceViewSchema)) };
-}) satisfies PageServerLoad;
+	const resource = getConnection(resourceid);
 
-export const actions: Actions = {
-	default: async ({ request, params: { viewid }, locals: { db } }) => {
-		const form = await superValidate(request, zod(workspaceViewSchema));
-
-		if (!form.valid) return { form };
-
-		try {
-			await db.update(workspaceViewTable).set(form.data).where(eq(workspaceViewTable.id, viewid));
-			return message(form, { success: true, message: 'View updated successfully.' });
-		} catch (error) {
-			console.error(error);
-			return message(
-				form,
-				{ success: false, message: 'Failed to update view. Please try again.' },
-				{
-					status: 400
-				}
-			);
-		}
+	if (!resource) {
+		return { viewData: null };
 	}
-};
+
+	const viewData = getViewData(workspaceView, Object.fromEntries(searchParams), resource);
+	return { viewData };
+}) satisfies PageServerLoad;

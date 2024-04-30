@@ -1,5 +1,5 @@
 export * from './auth';
 export * from './resource';
 export * from './workspace';
-export * from './workspace-element';
-export * from './workspace-view';
+export * from './ws-element';
+export * from './ws-view';
