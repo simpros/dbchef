@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import type { SuccessViewData } from '../../call-view-query';
-	import DetailForm from '../../details/detail-form.svelte';
 
 	export let viewData: SuccessViewData;
 </script>
@@ -18,9 +17,7 @@
 					{/if}
 				{/each}
 			</Card.Header>
-			<Card.Footer>
-				<DetailForm />
-			</Card.Footer>
+			<Card.Footer></Card.Footer>
 		</Card.Root>
 	{/each}
 </div>
