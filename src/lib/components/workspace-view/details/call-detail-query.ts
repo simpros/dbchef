@@ -17,13 +17,13 @@ function queryParser(rawQuery: string, parameter: Record<string, unknown>) {
 }
 
 export async function callDetailQuery(
-	element: WorkspaceView,
+	view: WorkspaceView,
 	parameter: Record<string, unknown>,
 	dbConnection: Pool
 ): Promise<DetailData> {
 	try {
-		if (!element.detailQuery) throw new Error('No detail query');
-		const query = queryParser(element.detailQuery, parameter);
+		if (!view.detailQuery) throw new Error('No detail query');
+		const query = queryParser(view.detailQuery, parameter);
 		const result = await dbConnection.query(query);
 
 		if (result.rows.length === 0) throw new Error('No data found');
@@ -31,15 +31,15 @@ export async function callDetailQuery(
 
 		return {
 			success: true,
-			name: element.name,
-			type: element.type,
+			name: view.name,
+			type: view.type,
 			rows: result
 		};
 	} catch (e) {
 		if (e instanceof Error) {
-			return { success: false, name: element.name, error: e.message } as const;
+			return { success: false, name: view.name, error: e.message } as const;
 		}
-		return { success: false, name: element.name, error: 'Invalid Query' } as const;
+		return { success: false, name: view.name, error: 'Invalid Query' } as const;
 	}
 }
 

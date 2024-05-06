@@ -9,6 +9,6 @@
 	<h3>DETAILS</h3>
 
 	{#if data.form}
-		<DetailForm data={data.form} />
+		<DetailForm data={data.form} fieldTypes={data.types} />
 	{/if}
 </div>

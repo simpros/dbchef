@@ -12,7 +12,7 @@
 	{:then data}
 		{#if data.success}
 			{#if data.type === 'card-grid'}
-				<CardGridView viewData={data} />
+				<CardGridView viewId={viewData.id} viewData={data} />
 			{/if}
 		{:else}
 			<p>{data.error}</p>

@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import type { SuccessViewData } from '../../call-view-query';
 
+	export let viewId: string;
 	export let viewData: SuccessViewData;
 </script>
 
@@ -17,7 +19,9 @@
 					{/if}
 				{/each}
 			</Card.Header>
-			<Card.Footer></Card.Footer>
+			<Card.Footer>
+				<Button href="{viewId}/{Object.values(row)[0]}">Edit</Button>
+			</Card.Footer>
 		</Card.Root>
 	{/each}
 </div>

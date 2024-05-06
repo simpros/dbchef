@@ -1,6 +1,7 @@
 import { generateDetailSchema } from '$lib/components/workspace-view/details/detail-schema';
 import { getDetailData } from '$lib/components/workspace-view/details/get-detail-data';
 import { getConnection } from '$lib/connections';
+import { getFieldTypesFromQuery } from '$lib/pg-utils/get-field-types';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -24,15 +25,27 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		return {};
 	}
 
-	const details = await getDetailData(view, { item }, connection).data;
+	if (!view.detailQuery) {
+		error(400, 'No detail query');
+	}
+
+	const [details, types] = await Promise.all([
+		getDetailData(view, { item }, connection).data,
+		getFieldTypesFromQuery(view.detailQuery, connection)
+	]);
 
 	if (details.success === false) {
 		error(400, details.error);
 	}
+	if (types === null) {
+		error(400, 'Could not determine field types of detailQuery');
+	}
 
-	const schema = generateDetailSchema(details.rows.fields);
+	const row = details.rows.rows[0];
 
-	const form = await superValidate(details.rows.rows[0], zod(schema));
+	const schema = generateDetailSchema(details.rows.fields, types);
 
-	return { form };
+	const form = await superValidate(row, zod(schema));
+
+	return { form, types };
 }) satisfies PageServerLoad;
