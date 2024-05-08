@@ -15,6 +15,8 @@ function mapNativeDataTypeToFieldDataType(native_data_type: string): FieldDataTy
 		case 'date':
 		case 'timestamp':
 		case 'time':
+		case 'timestamp with time zone':
+		case 'timestamp without time zone':
 			return 'date';
 		case 'boolean':
 			return 'boolean';

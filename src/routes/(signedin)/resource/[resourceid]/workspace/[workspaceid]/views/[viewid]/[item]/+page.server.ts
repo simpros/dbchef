@@ -2,10 +2,10 @@ import { generateDetailSchema } from '$lib/components/workspace-view/details/det
 import { getDetailData } from '$lib/components/workspace-view/details/get-detail-data';
 import { getConnection } from '$lib/connections';
 import { getFieldTypesFromQuery } from '$lib/pg-utils/get-field-types';
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ params: { resourceid, viewid, item }, locals: { db } }) => {
 	const view = await db.query.workspaceViewTable.findFirst({
@@ -45,7 +45,58 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 
 	const schema = generateDetailSchema(details.rows.fields, types);
 
-	const form = await superValidate(row, zod(schema));
+	const form = await superValidate(row, zod(schema), {
+		id: 'detail'
+	});
 
 	return { form, types };
 }) satisfies PageServerLoad;
+
+export const actions: Actions = {
+	default: async ({ request, locals: { db }, params: { viewid, resourceid, item } }) => {
+		const view = await db.query.workspaceViewTable.findFirst({
+			where: ({ id }, { eq }) => eq(id, viewid),
+			with: {
+				workspace: true
+			}
+		});
+
+		if (!view) {
+			return fail(404, { error: 'View not found' });
+		}
+
+		const connection = getConnection(resourceid);
+
+		if (!connection) {
+			return fail(400, { error: 'Connection not found' });
+		}
+
+		if (!view.detailQuery) {
+			return fail(400, { error: 'No detail query' });
+		}
+
+		const [details, types] = await Promise.all([
+			getDetailData(view, { item }, connection).data,
+			getFieldTypesFromQuery(view.detailQuery, connection)
+		]);
+
+		if (details.success === false) {
+			error(400, details.error);
+		}
+		if (types === null) {
+			error(400, 'Could not determine field types of detailQuery');
+		}
+
+		const schema = generateDetailSchema(details.rows.fields, types);
+
+		const form = await superValidate(request, zod(schema), {
+			id: 'detail'
+		});
+
+		if (!form.valid) {
+			return { form };
+		}
+
+		return { form };
+	}
+};

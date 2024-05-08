@@ -4,6 +4,47 @@
 
 Are you tired of searching for the correct data within database with dozens of tables? So was I. Thats why I build DBChef - a reuseable and unopinionated Admin-UI. Connect your resource and build views that fit your usecase.
 
+# Supported Databases
+
+- [x] Postgres
+
+## Usage
+
+DBChef is structured into 4 layers.
+
+### Resource
+
+A Resource is basically a DB Connection.<br />**Currently no passwords are stored in DBChef, you will have to reenter the password after every restart of DBChef**
+
+### Workspace
+
+A workspace is a use-case specific set of views on a resource. For example a Movie Application could have a Workspace based on Genres and a Workspace based on Actors.
+
+#### Workspace Elements
+
+A Workspace Element is actually a database select that allows to do pick a reusable value. This value can be used by other Workspace Elements or views through the `{WORKSPACE_ELEMENT_NAME}` placeholder.
+
+## Example
+
+Image you want to build an Movie-Recommendation-Service. Therefor you have to build a Movie Database.
+
+First of all we want to create the resource that connects to the database.
+
+Next we can create a "Genre" Workspace on that resource to work with the database on a per Genre level. To achive that we can add an Element to the Workspace with a query like this:
+
+```sql
+Select id as value, genre as label from genres;
+```
+
+This will add a dropdown-selection that displays all of the genres.
+
+The next step would be to create a view that makes use of the Workspace Element.
+The query could look like this:
+
+```sql
+Select * from movies where genre_id = {Genre}
+```
+
 ### Development
 
 This application is build with bun and sveltekit.

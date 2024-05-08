@@ -1,5 +1,5 @@
 {
 	"workbench.editor.customLabels.patterns": {
-		"src/routes/**": "${dirname} | ${filename}"
+		"src/routes/**/*": "${dirname} | ${filename}"
 	}
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { DatePicker } from '$lib/components/ui/date-picker';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import type { FieldTypes } from '$lib/pg-utils/get-field-types';
@@ -7,30 +8,31 @@
 
 	export let data: SuperValidated<Infer<DetailSchema>>;
 	export let fieldTypes: FieldTypes;
+	export let disabled: boolean = false;
+
 	const form = superForm(data, {
 		dataType: 'json'
 	});
 	const { form: formData, enhance } = form;
 </script>
 
-<div>
-	<form use:enhance method="POST">
-		<div class="grid gap-4 grid-auto-fit-md">
-			{#each Object.keys($formData) as key}
-				<Form.FormField {form} name={key}>
-					<Form.FormControl let:attrs>
-						<Form.Label for={key}>{key}</Form.Label>
-						{#if fieldTypes[key].data_type === 'text'}
-							<Input {...attrs} bind:value={$formData[key]} />
-						{:else if fieldTypes[key].data_type === 'date'}
-							<pre>{$formData[key]}</pre>
-							<!-- <DatePicker {...attrs} bind:value={$formData[key]} /> -->
-						{:else}
-							<Input {...attrs} bind:value={$formData[key]} />
-						{/if}
-					</Form.FormControl>
-				</Form.FormField>
-			{/each}
-		</div>
-	</form>
-</div>
+<form use:enhance method="POST" class="grid h-full grid-rows-[1fr_auto]">
+	<div class="grid auto-rows-min gap-4 grid-auto-fit-xl">
+		{#each Object.keys($formData) as key}
+			<Form.FormField {form} name={key}>
+				<Form.FormControl let:attrs>
+					<Form.Label for={key}>{key}</Form.Label>
+					{#if fieldTypes[key].data_type === 'text'}
+						<Input {disabled} {...attrs} bind:value={$formData[key]} />
+					{:else if fieldTypes[key].data_type === 'date'}
+						<DatePicker {disabled} {...attrs} bind:value={$formData[key]} />
+						<input hidden value={$formData[key]} name={attrs.name} />
+					{:else}
+						<Input {disabled} {...attrs} bind:value={$formData[key]} />
+					{/if}
+				</Form.FormControl>
+			</Form.FormField>
+		{/each}
+	</div>
+	<Form.Button class="w-fit">Save</Form.Button>
+</form>

@@ -5,8 +5,8 @@
 	import { cn } from '$lib/utils.js';
 	import {
 		DateFormatter,
+		fromDate,
 		getLocalTimeZone,
-		parseDate,
 		type DateValue
 	} from '@internationalized/date';
 	import CalendarIcon from 'lucide-svelte/icons/calendar';
@@ -19,27 +19,38 @@
 		dateStyle: 'long'
 	});
 
-	let nativeValue: $$Props['value'] = undefined;
-	let value: DateValue | undefined;
-	$: value = nativeValue ? parseDate(nativeValue) : undefined;
+	export let value: Date | undefined = undefined;
+	let mappedValue: DateValue | undefined;
+	export let disabled: $$Props['disabled'] = false;
 
-	export { nativeValue as value };
-
-	$: console.log(nativeValue);
+	$: {
+		mappedValue = value ? fromDate(value, getLocalTimeZone()) : undefined;
+	}
 </script>
 
 <Popover.Root>
-	<Popover.Trigger asChild let:builder {...$$restProps}>
+	<Popover.Trigger let:builder {...$$restProps} asChild>
 		<Button
+			{disabled}
 			variant="outline"
-			class={cn('w-[280px] justify-start text-left font-normal', !value && 'text-muted-foreground')}
+			class={cn('w-full justify-start text-left font-normal', !value && 'text-muted-foreground')}
 			builders={[builder]}
 		>
 			<CalendarIcon class="mr-2 h-4 w-4" />
-			{value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
+			{value ? df.format(value) : 'Pick a date'}
 		</Button>
 	</Popover.Trigger>
 	<Popover.Content class="w-auto p-0">
-		<Calendar bind:value initialFocus />
+		<Calendar
+			value={mappedValue}
+			initialFocus
+			onValueChange={(v) => {
+				if (v) {
+					value = v.toDate(getLocalTimeZone());
+				} else {
+					value = undefined;
+				}
+			}}
+		/>
 	</Popover.Content>
 </Popover.Root>

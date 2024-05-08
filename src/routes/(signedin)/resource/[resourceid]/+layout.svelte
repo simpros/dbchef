@@ -10,7 +10,7 @@
 {#if !data.pool}
 	<EstablishConnectionModal resource={data.resource} data={data.establishConnectionForm} />
 {/if}
-<div>
+<div class="grid h-full grid-rows-[auto_auto_1fr]">
 	<div class="grid grid-cols-[1fr_auto] items-end">
 		<div>
 			<span class="text-sm text-muted-foreground">Resource</span>
