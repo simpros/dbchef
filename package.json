@@ -17,9 +17,9 @@
 		"@internationalized/date": "3.5.3",
 		"@lucia-auth/adapter-drizzle": "^1.0.7",
 		"@playwright/test": "^1.28.1",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/kit": "2.5.7",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@types/bun": "^1.0.12",
+		"@types/bun": "^1.1.2",
 		"@types/eslint": "^8.56.0",
 		"@types/pg": "^8.11.4",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
@@ -58,7 +58,7 @@
 	"type": "module",
 	"dependencies": {
 		"@libsql/client": "^0.6.0",
-		"drizzle-kit": "^0.20.18",
+		"drizzle-kit": "^0.21.1",
 		"drizzle-orm": "^0.30.10",
 		"oslo": "^1.2.0"
 	},
