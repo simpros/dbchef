@@ -49,7 +49,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		id: 'detail'
 	});
 
-	return { form, types };
+	return { form, types, readonly: !view.updatedQuery };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -92,6 +92,8 @@ export const actions: Actions = {
 		const form = await superValidate(request, zod(schema), {
 			id: 'detail'
 		});
+
+		console.log(form.data);
 
 		if (!form.valid) {
 			return { form };

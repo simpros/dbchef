@@ -10,7 +10,7 @@
 	<BackAnchor />
 	{#if data.form}
 		<div class="p-2">
-			<DetailForm data={data.form} fieldTypes={data.types} />
+			<DetailForm disabled={data.readonly} data={data.form} fieldTypes={data.types} />
 		</div>
 	{/if}
 </div>

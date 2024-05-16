@@ -55,7 +55,7 @@
 							<Card.Root>
 								<Card.Header>
 									<Card.Title>{view.name}</Card.Title>
-									<Card.Description>{view.description}</Card.Description>
+									<Card.Description class="h-5">{view.description ?? ''}</Card.Description>
 								</Card.Header>
 								<Card.Footer class="justify-end">
 									<Button href="edit/{view.id}">Edit</Button>
