@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BackAnchor from '$lib/components/ui/anchor/back-anchor.svelte';
-	import DetailForm from '$lib/components/workspace-view/details/detail-form.svelte';
+	import DetailForm from '$lib/row-details/detail-form.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

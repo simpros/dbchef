@@ -1,7 +1,7 @@
-import { generateDetailSchema } from '$lib/components/workspace-view/details/detail-schema';
-import { getDetailData } from '$lib/components/workspace-view/details/get-detail-data';
 import { getConnection } from '$lib/connections';
 import { getFieldTypesFromQuery } from '$lib/pg-utils/get-field-types';
+import { generateDetailSchema } from '$lib/row-details/detail-schema';
+import { getDetailData } from '$lib/row-details/get-detail-data';
 import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

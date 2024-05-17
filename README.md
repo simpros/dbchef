@@ -28,8 +28,8 @@ A Workspace Element is actually a database select that allows to do pick a reusa
 
 A view is the actual representation of database rows. Workspace-Elements can be used to dynamically set query-elements through the `{WORKSPACE_ELEMENT_NAME}` placeholder.
 
-You can also specify a **Detail Query** which will allow you to display details based on a `{{item}}` placeholder. The item is currently determinded by the first column specified in the **View Query**!
-If you also want to enable modifying the data, you have to specify an **UPDATE** Query - its required to have a `{{values}}` placeholder in it, which will be replaced with comma sepeated list of the values from the form. You also can specify a WHERE clause with a `{{item}}` placeholder to specify which rows should be updated.
+You can also specify a **Detail Query** which will allow you to display details based on a `{item}` placeholder. The item is currently determinded by the first column specified in the **View Query**!
+If you also want to enable modifying the data, you have to specify an **UPDATE** Query - its required to have a `{values}` placeholder in it, which will be replaced with comma sepeated list of the values from the form. You also can specify a WHERE clause with a `{item}` placeholder to specify which rows should be updated.
 
 ## Example
 

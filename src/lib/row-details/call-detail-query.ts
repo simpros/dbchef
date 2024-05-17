@@ -1,20 +1,6 @@
 import type { WorkspaceView, availableViewTypes } from '$db/schema';
+import { parseChefQuery } from '$lib/pg-utils/parse-chef-query';
 import type { Pool, QueryResult } from 'pg';
-
-function queryParser(rawQuery: string, parameter: Record<string, unknown>) {
-	//replace all {X} params in the rawQuery with the corresponding value from parameter
-	const newQuery = rawQuery.replace(/{(\w+)}/g, (substring) => {
-		const key = substring.slice(1, -1);
-		const value = parameter[key];
-
-		if (value === undefined) throw new Error(`Parameter ${key} is missing`);
-
-		if (typeof value === 'number') return value + '';
-		if (typeof value === 'boolean') return value + '';
-		return `'${parameter[key]}'`;
-	});
-	return newQuery;
-}
 
 export async function callDetailQuery(
 	view: WorkspaceView,
@@ -23,7 +9,7 @@ export async function callDetailQuery(
 ): Promise<DetailData> {
 	try {
 		if (!view.detailQuery) throw new Error('No detail query');
-		const query = queryParser(view.detailQuery, parameter);
+		const query = parseChefQuery(view.detailQuery, parameter);
 		const result = await dbConnection.query(query);
 
 		if (result.rows.length === 0) throw new Error('No data found');
