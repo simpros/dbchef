@@ -11,6 +11,7 @@
 	export let disabled: boolean = false;
 
 	const form = superForm(data, {
+		resetForm: false,
 		dataType: 'json'
 	});
 	const { form: formData, enhance } = form;

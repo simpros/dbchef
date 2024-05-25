@@ -1,5 +1,5 @@
 import type { WorkspaceView, availableViewTypes } from '$db/schema';
-import { parseChefQuery } from '$lib/pg-utils/parse-chef-query';
+import { replaceChefQueryPlaceholder } from '$lib/pg-utils/parse-chef-query';
 import type { Pool, QueryResult } from 'pg';
 
 export async function callDetailQuery(
@@ -9,8 +9,10 @@ export async function callDetailQuery(
 ): Promise<DetailData> {
 	try {
 		if (!view.detailQuery) throw new Error('No detail query');
-		const query = parseChefQuery(view.detailQuery, parameter);
+		const query = replaceChefQueryPlaceholder(view.detailQuery, parameter);
 		const result = await dbConnection.query(query);
+
+		console.log(result.rows[0]);
 
 		if (result.rows.length === 0) throw new Error('No data found');
 		if (result.rows.length > 1) throw new Error('Multiple rows found');
@@ -19,7 +21,7 @@ export async function callDetailQuery(
 			success: true,
 			name: view.name,
 			type: view.type,
-			rows: result
+			result
 		};
 	} catch (e) {
 		if (e instanceof Error) {
@@ -33,7 +35,7 @@ export type SuccessViewData = {
 	success: true;
 	name: string;
 	type: (typeof availableViewTypes)[number];
-	rows: QueryResult;
+	result: QueryResult;
 };
 
 export type ErrorViewData = {

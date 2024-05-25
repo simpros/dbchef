@@ -1,9 +1,10 @@
 import { getConnection } from '$lib/connections';
-import { getFieldTypesFromQuery } from '$lib/pg-utils/get-field-types';
+import { getFieldTypesForForm } from '$lib/pg-utils/get-field-types';
+import { parseUpdateChefQuery } from '$lib/pg-utils/parse-chef-query';
 import { generateDetailSchema } from '$lib/row-details/detail-schema';
 import { getDetailData } from '$lib/row-details/get-detail-data';
 import { error, fail } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -31,7 +32,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 
 	const [details, types] = await Promise.all([
 		getDetailData(view, { item }, connection).data,
-		getFieldTypesFromQuery(view.detailQuery, connection)
+		getFieldTypesForForm(view.detailQuery, connection)
 	]);
 
 	if (details.success === false) {
@@ -41,9 +42,9 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		error(400, 'Could not determine field types of detailQuery');
 	}
 
-	const row = details.rows.rows[0];
+	const row = details.result.rows[0];
 
-	const schema = generateDetailSchema(details.rows.fields, types);
+	const schema = generateDetailSchema(details.result.fields, types);
 
 	const form = await superValidate(row, zod(schema), {
 		id: 'detail'
@@ -53,7 +54,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	default: async ({ request, locals: { db }, params: { viewid, resourceid, item } }) => {
+	default: async ({ request, locals: { db }, params: { viewid, resourceid, item }, url }) => {
 		const view = await db.query.workspaceViewTable.findFirst({
 			where: ({ id }, { eq }) => eq(id, viewid),
 			with: {
@@ -71,13 +72,13 @@ export const actions: Actions = {
 			return fail(400, { error: 'Connection not found' });
 		}
 
-		if (!view.detailQuery) {
+		if (!view.detailQuery || !view.updatedQuery) {
 			return fail(400, { error: 'No detail query' });
 		}
 
 		const [details, types] = await Promise.all([
 			getDetailData(view, { item }, connection).data,
-			getFieldTypesFromQuery(view.detailQuery, connection)
+			getFieldTypesForForm(view.detailQuery, connection)
 		]);
 
 		if (details.success === false) {
@@ -87,18 +88,31 @@ export const actions: Actions = {
 			error(400, 'Could not determine field types of detailQuery');
 		}
 
-		const schema = generateDetailSchema(details.rows.fields, types);
+		const schema = generateDetailSchema(details.result.fields, types);
 
 		const form = await superValidate(request, zod(schema), {
 			id: 'detail'
 		});
 
-		console.log(form.data);
-
 		if (!form.valid) {
 			return { form };
 		}
 
-		return { form };
+		const updateQuery = await parseUpdateChefQuery(
+			view.updatedQuery,
+			{ item, ...Object.fromEntries(url.searchParams) },
+			form.data,
+			connection
+		);
+
+		try {
+			await connection.query(updateQuery);
+			return message(form, { success: true, message: 'Updated' });
+		} catch (e) {
+			return message(form, {
+				success: false,
+				message: 'Something went wrong. Please try again later.'
+			});
+		}
 	}
 };

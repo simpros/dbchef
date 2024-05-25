@@ -3,6 +3,8 @@ import { db } from '$lib/server/db';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
+process.env.TZ = 'UTC';
+
 const luciaHook: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 	if (!sessionId) {
