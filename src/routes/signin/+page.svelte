@@ -6,7 +6,7 @@
 </script>
 
 <section class="container grid h-full grid-rows-1 items-center">
-	<div class="mx-auto w-full max-w-md">
+	<div class="mx-auto w-full max-w-2xl">
 		<SigninForm data={data.form} />
 	</div>
 </section>
