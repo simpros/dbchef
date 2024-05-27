@@ -26,8 +26,6 @@ export async function callPreviewToDb(data: Preview, connection: Pool) {
 				if (e instanceof Error) {
 					return { name: element.name, error: e.message };
 				}
-				console.log(e);
-
 				return { name: element.name, error: 'Invalid Query' };
 			}
 		})

@@ -1,4 +1,4 @@
-import type { FieldTypes } from '$lib/pg-utils/get-field-types';
+import type { FieldTypes } from '$lib/pg-utils/converter/db-to-form';
 import type { QueryResult } from 'pg';
 import { z } from 'zod';
 

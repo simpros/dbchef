@@ -2,7 +2,7 @@
 	import { DatePicker } from '$lib/components/ui/date-picker';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import type { FieldTypes } from '$lib/pg-utils/get-field-types';
+	import type { FieldTypes } from '$lib/pg-utils/converter/db-to-form';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms/client';
 	import type { DetailSchema } from './detail-schema';
 

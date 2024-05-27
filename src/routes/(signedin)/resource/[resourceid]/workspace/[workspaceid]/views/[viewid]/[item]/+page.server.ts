@@ -1,5 +1,5 @@
 import { getConnection } from '$lib/connections';
-import { getFieldTypesForForm } from '$lib/pg-utils/get-field-types';
+import { getFieldTypesForForm } from '$lib/pg-utils/converter/db-to-form';
 import { parseUpdateChefQuery } from '$lib/pg-utils/parse-chef-query';
 import { generateDetailSchema } from '$lib/row-details/detail-schema';
 import { getDetailData } from '$lib/row-details/get-detail-data';

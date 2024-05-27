@@ -1,5 +1,5 @@
 import type { WorkspaceView, availableViewTypes } from '$db/schema';
-import { replaceChefQueryPlaceholder } from '$lib/pg-utils/parse-chef-query';
+import { parseSelectChefQuery } from '$lib/pg-utils/parse-chef-query';
 import type { Pool, QueryResult } from 'pg';
 
 export async function callDetailQuery(
@@ -9,10 +9,8 @@ export async function callDetailQuery(
 ): Promise<DetailData> {
 	try {
 		if (!view.detailQuery) throw new Error('No detail query');
-		const query = replaceChefQueryPlaceholder(view.detailQuery, parameter);
+		const query = parseSelectChefQuery(view.detailQuery, parameter);
 		const result = await dbConnection.query(query);
-
-		console.log(result.rows[0]);
 
 		if (result.rows.length === 0) throw new Error('No data found');
 		if (result.rows.length > 1) throw new Error('Multiple rows found');

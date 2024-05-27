@@ -1,10 +1,15 @@
 import type { Pool } from 'pg';
-import { mapFormToUpdateQueryValues } from './get-field-types';
+import { mapFormToUpdateQueryValues } from './converter/form-to-db';
 
-// SELECT
-export function replaceChefQueryPlaceholder(rawQuery: string, parameter: Record<string, unknown>) {
+/**
+ * Takes a stored query with parameters and replaces the parameters with the values from the parameter object
+ * @param chefQuery The query that should be sent to the resource
+ * @param parameter The parameters that should be used in the query
+ * @returns The chefquery with the parameters replaced
+ */
+export function parseSelectChefQuery(chefQuery: string, parameter: Record<string, unknown>) {
 	//replace all {X} params in the rawQuery with the corresponding value from parameter
-	const newQuery = rawQuery.replace(/{(\w+)}/g, (substring) => {
+	const newQuery = chefQuery.replace(/{(\w+)}/g, (substring) => {
 		const key = substring.slice(1, -1);
 		const value = parameter[key];
 
@@ -17,6 +22,14 @@ export function replaceChefQueryPlaceholder(rawQuery: string, parameter: Record<
 	return newQuery;
 }
 
+/**
+ *
+ * @param chefQuery The query that should be sent to the resource with {values} as a placeholder for the values and optional parameters
+ * @param parameter The parameters that should be used in the query
+ * @param values The values that should be used in the query
+ * @param dbConnection Thew connection to the database - Required for getting the field types of the values
+ * @returns
+ */
 export async function parseUpdateChefQuery(
 	chefQuery: string,
 	parameter: Record<string, unknown>,
@@ -30,6 +43,6 @@ export async function parseUpdateChefQuery(
 		'{values}',
 		await mapFormToUpdateQueryValues(chefQuery, values, dbConnection)
 	);
-	const finishedUpdateQuery = replaceChefQueryPlaceholder(queryWithValues, parameter);
+	const finishedUpdateQuery = parseSelectChefQuery(queryWithValues, parameter);
 	return finishedUpdateQuery;
 }
