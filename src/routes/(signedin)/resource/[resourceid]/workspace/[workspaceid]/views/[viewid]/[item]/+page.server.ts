@@ -3,6 +3,7 @@ import { getFieldTypesForForm } from '$lib/pg-utils/converter/db-to-form';
 import { parseUpdateChefQuery } from '$lib/pg-utils/parse-chef-query';
 import { generateDetailSchema } from '$lib/row-details/detail-schema';
 import { getDetailData } from '$lib/row-details/get-detail-data';
+import { parseFormValuesFromRow } from '$lib/row-details/parse-form-values';
 import { error, fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -46,7 +47,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 
 	const schema = generateDetailSchema(details.result.fields, types);
 
-	const form = await superValidate(row, zod(schema), {
+	const form = await superValidate(parseFormValuesFromRow(row, types), zod(schema), {
 		id: 'detail'
 	});
 

@@ -1,7 +1,7 @@
 import type { Pool } from 'pg';
 import { getColumnTypes } from './common-converter';
 
-export type ChefFormType = 'text' | 'number' | 'date' | 'boolean' | 'UNKNOWN';
+export type ChefFormType = 'text' | 'number' | 'date' | 'boolean' | 'json' | 'UNKNOWN';
 export type FieldTypes = Record<string, { data_type: ChefFormType; is_nullable: boolean }>;
 
 function mapNativeDataTypeToFieldDataType(native_data_type: string): ChefFormType {
@@ -21,6 +21,9 @@ function mapNativeDataTypeToFieldDataType(native_data_type: string): ChefFormTyp
 			return 'date';
 		case 'boolean':
 			return 'boolean';
+		case 'jsonb':
+		case 'json':
+			return 'json';
 		default:
 			return 'UNKNOWN';
 	}
