@@ -35,9 +35,34 @@
 			<Form.Control let:attrs>
 				<Form.Label>Query</Form.Label>
 				<Textarea
+					class="font-mono"
 					{...attrs}
-					placeholder="Select * from movies where id = &lbrace;genre&rbrace;"
+					placeholder="Select * from movies where genre_id = &lbrace;genre&rbrace;"
 					bind:value={$formData.providerQuery}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field class="col-span-full" {form} name="detailQuery">
+			<Form.Control let:attrs>
+				<Form.Label>Detail Query</Form.Label>
+				<Textarea
+					class="font-mono"
+					{...attrs}
+					placeholder="Select * from movies where id = &lbrace;item&rbrace;"
+					bind:value={$formData.detailQuery}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field class="col-span-full" {form} name="updateQuery">
+			<Form.Control let:attrs>
+				<Form.Label>Update Query</Form.Label>
+				<Textarea
+					class="font-mono"
+					{...attrs}
+					placeholder="UPDATE movies SET &lbrace;values&rbrace; WHERE id = &lbrace;item&rbrace;"
+					bind:value={$formData.updateQuery}
 				/>
 			</Form.Control>
 			<Form.FieldErrors />

@@ -21,7 +21,4 @@
 <div>
 	<BackAnchor href="../edit" />
 	<WorkspaceViewForm {form} availableCardFields={data.availableCardField} />
-	{#if data.elements}
-		<!-- <WorkspaceViewData viewData={data.view} /> -->
-	{/if}
 </div>

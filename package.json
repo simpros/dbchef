@@ -57,7 +57,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@libsql/client": "^0.6.0",
 		"drizzle-kit": "^0.21.1",
 		"drizzle-orm": "^0.30.10",
 		"oslo": "^1.2.0"

@@ -6,6 +6,8 @@ export const workspaceViewSchema = z.object({
 	description: z.string().nullable(),
 	type: z.enum(availableViewTypes).default('card-grid'),
 	providerQuery: z.string().min(1),
+	detailQuery: z.string().nullable(),
+	updateQuery: z.string().nullable(),
 	card: z.string().array().default([])
 });
 
