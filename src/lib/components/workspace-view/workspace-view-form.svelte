@@ -2,14 +2,14 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { type Infer, type SuperForm } from 'sveltekit-superforms/client';
-	import { Separator } from '../ui/separator';
+	import type { ChefRelations } from '$lib/pg-utils/chef-relations';
+	import { arrayProxy, type Infer, type SuperForm } from 'sveltekit-superforms/client';
 	import type { WorkspaceViewSchema } from './workspace-view-schema';
 
-	export let availableCardFields: { name: string }[] = [];
 	export let form: SuperForm<Infer<WorkspaceViewSchema>>;
-
+	export let relations: ChefRelations;
 	const { form: formData, enhance } = form;
+	const { values } = arrayProxy(form, 'relations');
 </script>
 
 <form method="post" use:enhance class="space-y-6">
@@ -55,6 +55,32 @@
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
+
+		<div class="col-span-full">
+			{#if relations}
+				<h3 class="font-bold">Relations</h3>
+				<div class="grid gap-2">
+					{#each relations as relation, i}
+						<input type="hidden" name="relations[{i}].columnName" value={relation.column_name} />
+						<Form.Field {form} name={`relations[${i}].providerQuery`}>
+							<Form.Control let:attrs>
+								<Form.Label><span class="italic">{relation.column_name}</span> query</Form.Label>
+								<Form.Description>
+									{relation.target_column} / {relation.target_table}
+								</Form.Description>
+								<Textarea
+									{...attrs}
+									bind:value={$values[i].providerQuery}
+									placeholder="SELECT {relation.target_column} as value, name as label FROM {relation.target_table}"
+								/>
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
 		<Form.Field class="col-span-full" {form} name="updateQuery">
 			<Form.Control let:attrs>
 				<Form.Label>Update Query</Form.Label>
@@ -68,15 +94,6 @@
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
-	<Separator class="my-3" />
-	<div class="opacity-70">
-		<h3 class="text-lg font-bold">Card</h3>
-		<div class="grid grid-cols-1 gap-3">
-			<h4 class="font-bold">Available Fields</h4>
-			{#each availableCardFields as item}
-				<div class="rounded-md border p-3">{item.name}</div>
-			{/each}
-		</div>
-	</div>
+
 	<Form.Button class="w-fit">Save View</Form.Button>
 </form>

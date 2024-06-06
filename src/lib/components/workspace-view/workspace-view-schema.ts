@@ -8,7 +8,12 @@ export const workspaceViewSchema = z.object({
 	providerQuery: z.string().min(1),
 	detailQuery: z.string().nullable(),
 	updateQuery: z.string().nullable(),
-	card: z.string().array().default([])
+	relations: z.array(
+		z.object({
+			columnName: z.string().min(1),
+			providerQuery: z.string().nullable()
+		})
+	)
 });
 
 export type WorkspaceViewSchema = typeof workspaceViewSchema;

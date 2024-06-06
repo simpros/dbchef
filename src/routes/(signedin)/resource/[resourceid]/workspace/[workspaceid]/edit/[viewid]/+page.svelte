@@ -9,10 +9,13 @@
 	export let data: PageData;
 
 	const form = superForm(data.form, {
+		dataType: 'json',
 		async onUpdated({ form }) {
 			if (form.message?.success) {
 				toast.success('View saved');
 				await goto('../edit');
+			} else {
+				toast.error('Failed to save view');
 			}
 		}
 	});
@@ -20,5 +23,5 @@
 
 <div>
 	<BackAnchor href="../edit" />
-	<WorkspaceViewForm {form} availableCardFields={data.availableCardField} />
+	<WorkspaceViewForm {form} relations={data.relations} />
 </div>

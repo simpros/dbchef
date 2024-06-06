@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { genId } from '../../lib/generate-id';
 import { workspaceTable } from './workspace';
+import { wsViewRelationTable } from './ws-view-relations';
 
 export const availableViewTypes = ['card-grid'] as const;
 
@@ -22,9 +23,10 @@ export const workspaceViewTable = sqliteTable('workspace_view', {
 
 export type WorkspaceView = typeof workspaceViewTable.$inferSelect;
 
-export const workspaceViewRelations = relations(workspaceViewTable, ({ one }) => ({
+export const workspaceViewRelations = relations(workspaceViewTable, ({ one, many }) => ({
 	workspace: one(workspaceTable, {
 		fields: [workspaceViewTable.workspaceId],
 		references: [workspaceTable.id]
-	})
+	}),
+	relations: many(wsViewRelationTable)
 }));
