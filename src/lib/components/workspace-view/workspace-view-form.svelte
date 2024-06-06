@@ -7,7 +7,7 @@
 	import type { WorkspaceViewSchema } from './workspace-view-schema';
 
 	export let form: SuperForm<Infer<WorkspaceViewSchema>>;
-	export let relations: ChefRelations;
+	export let relations: ChefRelations = null;
 	const { form: formData, enhance } = form;
 	const { values } = arrayProxy(form, 'relations');
 </script>

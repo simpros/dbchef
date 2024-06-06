@@ -1,7 +1,7 @@
 <script lang="ts">
-	import BackAnchor from '$lib/components/ui/anchor/back-anchor.svelte';
-	import DetailForm from '$lib/row-details/detail-form.svelte';
+	import { BackAnchor } from '$lib/components/ui/anchor';
 	import type { PageData } from './$types';
+	import DetailForm from './detail-form.svelte';
 
 	export let data: PageData;
 </script>

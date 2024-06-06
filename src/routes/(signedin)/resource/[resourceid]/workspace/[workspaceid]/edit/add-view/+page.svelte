@@ -21,5 +21,4 @@
 <div>
 	<BackAnchor href="../edit" />
 	<WorkspaceViewForm {form} />
-	<!-- <WorkspaceViewPreview workspaceElements={data.elements} {form} /> -->
 </div>

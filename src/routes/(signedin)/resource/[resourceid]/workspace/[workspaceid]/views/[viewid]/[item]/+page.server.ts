@@ -1,13 +1,13 @@
 import { getConnection } from '$lib/connections';
 import { getFieldTypesForForm } from '$lib/pg-utils/converter/db-to-form';
 import { parseUpdateChefQuery } from '$lib/pg-utils/parse-chef-query';
-import { generateDetailSchema } from '$lib/row-details/detail-schema';
-import { getDetailData } from '$lib/row-details/get-detail-data';
-import { parseFormValuesFromRow } from '$lib/row-details/parse-form-values';
 import { error, fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
+import { generateDetailSchema } from './detail-schema';
+import { getDetailData } from './get-detail-data';
+import { parseFormValuesFromRow } from './parse-form-values';
 
 export const load = (async ({ params: { resourceid, viewid, item }, locals: { db } }) => {
 	const view = await db.query.workspaceViewTable.findFirst({
@@ -51,7 +51,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		id: 'detail'
 	});
 
-	return { form, types, readonly: !view.updatedQuery };
+	return { form, types, readonly: !view.updateQuery };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -73,7 +73,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'Connection not found' });
 		}
 
-		if (!view.detailQuery || !view.updatedQuery) {
+		if (!view.detailQuery || !view.updateQuery) {
 			return fail(400, { error: 'No detail query' });
 		}
 
@@ -100,7 +100,7 @@ export const actions: Actions = {
 		}
 
 		const updateQuery = await parseUpdateChefQuery(
-			view.updatedQuery,
+			view.updateQuery,
 			{ item, ...Object.fromEntries(url.searchParams) },
 			form.data,
 			connection

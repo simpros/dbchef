@@ -21,6 +21,12 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	let input: HTMLInputElement;
+
+	$: if (input) {
+		input.focus();
+	}
 </script>
 
 <div class="fixed inset-0 z-50 grid place-items-center bg-black/30 backdrop-blur-md">
@@ -36,7 +42,7 @@
 				<Form.FormField {form} name="password">
 					<Form.FormControl let:attrs>
 						<Label>Password</Label>
-						<Input type="password" {...attrs} bind:value={$formData.password} />
+						<Input bind:ref={input} type="password" {...attrs} bind:value={$formData.password} />
 					</Form.FormControl>
 					<Form.FieldErrors />
 				</Form.FormField>
