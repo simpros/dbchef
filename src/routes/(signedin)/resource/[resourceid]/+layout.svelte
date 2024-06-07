@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
-	import { Separator } from '$lib/components/ui/separator';
 	import type { LayoutData } from './$types';
 	import EstablishConnectionModal from './establish-connection-modal.svelte';
 
@@ -10,8 +8,8 @@
 {#if !data.pool}
 	<EstablishConnectionModal resource={data.resource} data={data.establishConnectionForm} />
 {/if}
-<div class="grid h-full grid-rows-[auto_auto_1fr]">
-	<div class="grid grid-cols-[1fr_auto] items-end">
+<div class="h-full">
+	<!-- <div class="grid grid-cols-[1fr_auto] items-end">
 		<div>
 			<span class="text-sm text-muted-foreground">Resource</span>
 			<h2 class="text-2xl font-bold">{data.resource?.name}</h2>
@@ -33,6 +31,6 @@
 			</Button>
 		</form>
 	</div>
-	<Separator class="my-3" />
+	<Separator class="my-3" /> -->
 	<slot />
 </div>

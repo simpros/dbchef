@@ -18,6 +18,8 @@ export const wsViewRelationTable = sqliteTable(
 	}
 );
 
+export type WorkspaceViewRelation = typeof wsViewRelationTable.$inferSelect;
+
 export const wsViewRelationRelations = relations(wsViewRelationTable, ({ one }) => ({
 	view: one(workspaceViewTable, {
 		fields: [wsViewRelationTable.viewId],

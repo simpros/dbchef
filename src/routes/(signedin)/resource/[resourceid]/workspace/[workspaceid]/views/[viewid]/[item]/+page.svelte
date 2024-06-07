@@ -6,11 +6,16 @@
 	export let data: PageData;
 </script>
 
-<div class="grid grid-rows-[auto_1fr]">
+<div class="grid h-full grid-rows-[auto_1fr]">
 	<BackAnchor />
 	{#if data.form}
 		<div class="p-2">
-			<DetailForm disabled={data.readonly} data={data.form} fieldTypes={data.types} />
+			<DetailForm
+				disabled={data.readonly}
+				data={data.form}
+				fieldTypes={data.types}
+				relations={data.relations}
+			/>
 		</div>
 	{/if}
 </div>

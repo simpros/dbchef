@@ -7,13 +7,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { generateDetailSchema } from './detail-schema';
 import { getDetailData } from './get-detail-data';
+import { getRelationsData } from './get-relations-data';
 import { parseFormValuesFromRow } from './parse-form-values';
 
-export const load = (async ({ params: { resourceid, viewid, item }, locals: { db } }) => {
+export const load = (async ({ params: { resourceid, viewid, item }, locals: { db }, url }) => {
 	const view = await db.query.workspaceViewTable.findFirst({
 		where: ({ id }, { eq }) => eq(id, viewid),
 		with: {
-			workspace: true
+			workspace: true,
+			relations: true
 		}
 	});
 
@@ -31,9 +33,12 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		error(400, 'No detail query');
 	}
 
-	const [details, types] = await Promise.all([
-		getDetailData(view, { item }, connection).data,
-		getFieldTypesForForm(view.detailQuery, connection)
+	const parameters = Object.fromEntries(url.searchParams);
+
+	const [details, types, relations] = await Promise.all([
+		getDetailData(view, { item }, connection),
+		getFieldTypesForForm(view.detailQuery, connection),
+		getRelationsData({ connection, parameters, relations: view.relations })
 	]);
 
 	if (details.success === false) {
@@ -51,7 +56,7 @@ export const load = (async ({ params: { resourceid, viewid, item }, locals: { db
 		id: 'detail'
 	});
 
-	return { form, types, readonly: !view.updateQuery };
+	return { form, types, readonly: !view.updateQuery, relations };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -78,7 +83,7 @@ export const actions: Actions = {
 		}
 
 		const [details, types] = await Promise.all([
-			getDetailData(view, { item }, connection).data,
+			getDetailData(view, { item }, connection),
 			getFieldTypesForForm(view.detailQuery, connection)
 		]);
 
@@ -99,9 +104,11 @@ export const actions: Actions = {
 			return { form };
 		}
 
+		const parameters = Object.fromEntries(url.searchParams);
+
 		const updateQuery = await parseUpdateChefQuery(
 			view.updateQuery,
-			{ item, ...Object.fromEntries(url.searchParams) },
+			{ item, ...parameters },
 			form.data,
 			connection
 		);
