@@ -4,7 +4,7 @@
 
 This is a **SvelteKit + Drizzle ORM** application with session-based authentication using SQLite. The project follows a clean server-client separation pattern:
 
-- **Database Layer**: Drizzle ORM with better-sqlite3 (`src/lib/server/db/`)
+- **Database Layer**: Drizzle ORM with bun:sqlite (`src/lib/server/db/`)
 - **Auth Layer**: Custom session-based auth with SHA256 token hashing (`src/lib/server/auth.ts`)
 - **Server Hooks**: Authentication middleware in `src/hooks.server.ts`
 - **Frontend**: Svelte 5 with TailwindCSS v4
@@ -25,6 +25,16 @@ This is a **SvelteKit + Drizzle ORM** application with session-based authenticat
 - Cookie management handled automatically by auth utilities
 - Session auto-renewal happens 15 days before expiration
 
+### Form Handling
+
+- **Always use SvelteKit SuperForms** for all form actions and validation
+- **Always use ArkType** for form validation schemas in all modules
+- Use `superValidate()` in `+page.server.ts` load functions to initialize forms
+- Handle form submissions in `+page.server.ts` actions using `superValidate()`
+- Integrate with existing form components in `src/lib/components/ui/form/`
+- Client-side form state managed through SuperForms stores
+- Leverage SuperForms' built-in validation, error handling, and progressive enhancement
+
 ### File Organization
 
 ```
@@ -33,17 +43,38 @@ src/routes/         # SvelteKit file-based routing
 src/hooks.server.ts # Global server middleware
 ```
 
+### Component Organization
+
+- **Route-specific components**: Place components that are very specific to a route and unlikely to be reused in the route folder alongside the page (e.g., `src/routes/dashboard/dashboard-header.svelte`)
+- **Reusable components**: Place in `src/lib/components/` organized by type or domain
+- **UI components**: Generic UI components go in `src/lib/components/ui/`
+
+### Schema Organization
+
+- **Always create dedicated schema folders** for validation schemas
+- **Form schemas**: Place in dedicated schema folders within the relevant domain (e.g., `src/lib/schemas/auth/`, `src/lib/schemas/user/`)
+- **Database schemas**: Keep in `src/lib/server/db/schema/` organized by domain
+- **Type definitions**: Co-locate with schemas or in dedicated types files
+
+### Database Queries and Mutations
+
+- **Always organize database operations by feature** in dedicated folders within `src/lib/`
+- **Query functions**: Place in feature-specific folders (e.g., `src/lib/queries/auth/`, `src/lib/queries/user/`, `src/lib/mutations/posts/`)
+- **Mutation functions**: Organize similarly in dedicated mutation folders by domain
+- **Separation of concerns**: Keep queries (read operations) and mutations (write operations) in separate folders for clarity
+
 ## Critical Commands
 
-- `pnpm dev` - Development server with hot reload
-- `pnpm db:push` - Push schema changes to database
-- `pnpm db:generate` - Generate migrations
-- `pnpm db:studio` - Open Drizzle Studio (database GUI)
-- `pnpm check` - TypeScript and Svelte validation
+- `bun dev` - Development server with hot reload
+- `bun db:push` - Push schema changes to database
+- `bun db:generate` - Generate migrations
+- `bun db:studio` - Open Drizzle Studio (database GUI)
+- `bun check` - TypeScript and Svelte validation
 
 ## Integration Points
 
 - **Database**: SQLite via Drizzle ORM, schema-first approach
+- **Forms**: SvelteKit SuperForms for all form handling and validation
 - **Styling**: TailwindCSS v4 with Vite plugin integration
 - **Type Safety**: Full TypeScript with Svelte type inference
 - **Auth Context**: Available in all server-side code via `event.locals`
